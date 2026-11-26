@@ -32,8 +32,15 @@ const products = [
     price: "Consultar",
     description: "Creamos tus ideas en 3D.",
     image: "",
-    colors: ["A elección"]
-  }
+    colors: ["A elección"],
+    
+  {name: "Reno Navideño Tejido",
+  category: "Decoración",
+  price: 3000,
+  description: "¡Ternura y magia para esta Navidad! Reno impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
+  image: "",
+  colors: ["A elección"]
+},
 ];
 
 const grid = document.getElementById("grid");
