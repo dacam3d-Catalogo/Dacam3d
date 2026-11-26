@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Producto | DaCam 3D</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .detail {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 25px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+    }
+    .detail img {
+      width: 100%;
+      border-radius: 18px;
+    }
+    .detail-photo {
+      min-height: 280px;
+      background: #f1f1f1;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+    }
+    .detail-description {
+      white-space: pre-line;
+      line-height: 1.7;
+    }
+    .back {
+      display: inline-block;
+      margin: 25px;
+    }
+    .detail-button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 14px 22px;
+      background: #222;
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+    @media(max-width: 650px) {
+      .detail {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img src="logo-dacam-3d.png" alt="DaCam 3D">
+    </a>
+  </header>
+
+  <a class="back" href="index.html#productos">← Volver al catálogo</a>
+
+  <main id="productDetail"></main>
+
+  <script src="script.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("id"));
+    const product = products[id];
+    const container = document.getElementById("productDetail");
+
+    if (product && Number.isInteger(id) && id >= 0) {
+      document.title = product.name + " | DaCam 3D";
+
+      container.innerHTML = `
+        <section class="detail">
+          <div class="detail-photo">
+            ${product.image
+              ? `<img src="${product.image}" alt="${product.name}">`
+              : '<span>DaCam 3D</span>'}
+          </div>
+
+          <div>
+            <p>${product.category}</p>
+            <h1>${product.name}</h1>
+            <h2>${product.price}</h2>
+            <p class="detail-description">${product.description}</p>
+            <a class="detail-button"
+               href="${wa(product.name)}"
+               target="_blank"
+               rel="noopener">
+              Consultar por WhatsApp ↗
+            </a>
+          </div>
+        </section>
+      `;
+    } else {
+      container.innerHTML = `
+        <section class="detail">
+          <div>
+            <h1>Producto no encontrado</h1>
+            <a href="index.html">Volver al catálogo</a>
+          </div>
+        </section>
+      `;
+    }
+  </script>
+
+</body>
+  </html>
+  

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Catálogo de DaCam 3D - Impresiones 3D personalizadas.">
+  <title>DaCam 3D | Catálogo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#"><img src="logo-dacam-3d.png" alt="DaCam 3D - Impresiones 3D"></a>
+    <a class="contact-link" id="topWhatsapp" href="#" target="_blank" rel="noopener">Contactanos ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">IMPRESIONES 3D</p>
+        <h1>Ideas que toman<br><em>forma.</em></h1>
+        <p>Descubrí nuestros productos impresos en 3D. Consultá por modelos, colores, medidas y trabajos personalizados.</p>
+        <a class="button" href="#productos">Ver catálogo <span>↓</span></a>
+      </div>
+      <div class="hero-logo">
+        <img src="logo-dacam-3d.png" alt="Logo DaCam 3D">
+      </div>
+    </section>
+
+    <section class="catalog" id="productos">
+      <div class="heading">
+        <div><p class="eyebrow">DACAM 3D</p><h2>Nuestros productos</h2></div>
+        <span id="count" class="count"></span>
+      </div>
+      <div class="tools">
+        <input id="search" type="search" placeholder="Buscar productos..." aria-label="Buscar productos">
+        <div id="filters" class="filters"></div>
+      </div>
+      <div id="grid" class="grid"></div>
+      <div id="product-detail" hidden></div>
+      <p id="empty" class="empty" hidden>No encontramos productos con esa búsqueda.</p>
+    </section>
+
+    <section class="cta">
+      <div><p class="eyebrow">¿TENÉS UNA IDEA?</p><h2>La podemos imprimir.</h2><p>Escribinos y contanos qué necesitás.</p></div>
+      <a class="button button-light" id="bottomWhatsapp" href="#" target="_blank" rel="noopener">Consultar por WhatsApp ↗</a>
+    </section>
+  </main>
+
+  <footer><img src="logo-dacam-3d.png" alt="DaCam 3D"><span>© <span id="year"></span> DaCam 3D · Impresiones 3D</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
