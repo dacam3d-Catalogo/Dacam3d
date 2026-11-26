@@ -18,3 +18,153 @@
 footer{padding:20px 7%;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}footer img{width:120px;height:45px;object-fit:contain;object-position:left}footer span{font-size:10px;color:#888}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:45px 7%}.hero-logo{width:260px}}
 @media(max-width:580px){.topbar{height:70px;padding:5px 5%}.brand img{width:150px;height:58px}.hero{grid-template-columns:1fr;padding:45px 7% 25px}.hero h1{font-size:47px}.hero-logo{width:220px;margin-top:12px}.catalog{padding:55px 5%}.heading h2{font-size:30px}.tools{align-items:stretch;flex-direction:column}.tools input{width:100%}.filters{padding-bottom:5px}.grid{gap:11px}.photo{height:155px}.info{padding:11px}.info h3{font-size:13px}.description{font-size:10px}.bottom{align-items:flex-start;flex-direction:column}.cta{margin:0 5% 45px;padding:28px 22px;align-items:flex-start;flex-direction:column}.cta h2{font-size:28px}footer{padding:18px 5%;align-items:flex-start;flex-direction:column}}
+
+/* ===== DISEÑO DE FICHAS DE PRODUCTOS DACAM 3D ===== */
+
+[hidden] {
+  display: none !important;
+}
+
+#product-detail {
+  padding: 20px 0 35px;
+  scroll-margin-top: 80px;
+}
+
+.dc-product {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #efede8;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.07);
+}
+
+.dc-back {
+  border: 0;
+  background: transparent;
+  padding: 12px 0;
+  font: 600 14px "DM Sans", sans-serif;
+  cursor: pointer;
+  color: #171717;
+}
+
+.dc-photo {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: #f1f0ed;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.dc-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dc-placeholder {
+  color: #aaa;
+  font-family: "Playfair Display", serif;
+  font-size: 24px;
+}
+
+.dc-product h2 {
+  margin: 12px 0;
+  font-family: "Playfair Display", serif;
+  font-size: 27px;
+}
+
+.dc-price {
+  font-size: 25px;
+  font-weight: 700;
+  margin: 15px 0;
+}
+
+.dc-description {
+  font-size: 14px;
+  color: #686868;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.dc-field {
+  margin: 22px 0;
+}
+
+.dc-field label {
+  display: block;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.dc-field select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #e9e6df;
+  border-radius: 8px;
+  background: #fff;
+  font: 14px "DM Sans", sans-serif;
+  color: #171717;
+}
+
+.dc-quantity {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.dc-quantity button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #e9e6df;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.dc-quantity strong {
+  font-size: 17px;
+}
+
+.dc-total {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.dc-order {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 16px;
+  margin-top: 24px;
+  background: #168b49;
+  color: #fff !important;
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dc-order:hover {
+  background: #116c39;
+}
+
+@media(max-width:580px) {
+  .dc-product {
+    padding: 17px;
+    margin: 10px auto;
+  }
+
+  .dc-product h2 {
+    font-size: 23px;
+  }
+}
