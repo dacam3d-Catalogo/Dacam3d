@@ -11,14 +11,6 @@ const products = [
     colors: ["Negro", "Blanco", "Rojo", "Azul", "Rosa"]
   },
   {
-    name: "Adornos decorativos",
-    category: "Decoración",
-    price: "Consultar",
-    description: "Decoración impresa en 3D.",
-    image: "",
-    colors: ["Blanco", "Rojo", "Verde", "Dorado"]
-  },
-  {
     name: "Organizadores",
     category: "Organización",
     price: "Consultar",
