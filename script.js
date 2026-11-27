@@ -1,6 +1,6 @@
-
 const WHATSAPP_NUMBER = "5491151168759";
 
+// PRODUCTOS
 const products = [
   {
     name: "Llaveros personalizados",
@@ -39,11 +39,12 @@ const products = [
     category: "Decoración",
     price: 3000,
     description: "¡Ternura y magia para esta Navidad! Reno impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
-    image: "",
+    image: "VENADO-PNG.jpg",
     colors: ["A elección"]
   },
 ];
 
+// ELEMENTOS DEL HTML
 const grid = document.getElementById("grid");
 const filters = document.getElementById("filters");
 const search = document.getElementById("search");
@@ -53,6 +54,7 @@ let active = "Todos";
 let selectedQuantity = 1;
 let selectedColor = "";
 
+// WHATSAPP
 function wa(name = "", quantity = 1, color = "") {
   const msg =
     "Hola DaCam 3D! Quiero pedir:\n" +
@@ -64,6 +66,7 @@ function wa(name = "", quantity = 1, color = "") {
     "?text=" + encodeURIComponent(msg);
 }
 
+// PRECIO
 function money(value) {
   const number = Number(
     String(value).replace(/[^\d.,]/g, "").replace(",", ".")
@@ -73,6 +76,7 @@ function money(value) {
   return number;
 }
 
+// PROTECCIÓN DE TEXTO HTML
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, char => ({
     "&": "&amp;",
@@ -83,18 +87,34 @@ function escapeHTML(value) {
   })[char]);
 }
 
+// ENLACES Y AÑO
 document.getElementById("topWhatsapp").href = wa();
 document.getElementById("bottomWhatsapp").href = wa();
 
 document.getElementById("year").textContent =
   new Date().getFullYear();
 
+// ESTILOS DE LAS FICHAS
 const style = document.createElement("style");
 
 style.textContent = `
+[hidden] {
+  display: none !important;
+}
+
 #product-detail {
   padding: 16px 0 35px;
   scroll-margin-top: 80px;
+}
+
+.dc-product {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #efede8;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.07);
 }
 
 .dc-back {
@@ -103,11 +123,6 @@ style.textContent = `
   padding: 12px 0;
   font-size: 16px;
   cursor: pointer;
-}
-
-.dc-product {
-  max-width: 650px;
-  margin: auto;
 }
 
 .dc-photo {
@@ -119,6 +134,7 @@ style.textContent = `
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 .dc-photo img {
@@ -163,6 +179,7 @@ style.textContent = `
   border: 1px solid #ccc;
   border-radius: 9px;
   font-size: 16px;
+  background: white;
 }
 
 .dc-quantity {
@@ -183,13 +200,15 @@ style.textContent = `
 
 .dc-order {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
   text-align: center;
   padding: 15px;
   margin-top: 22px;
   background: #168b49;
-  color: white;
+  color: white !important;
   border-radius: 10px;
-  text-decoration: none;
+  text-decoration: none !important;
   font-weight: 700;
 }
 
@@ -206,10 +225,18 @@ style.textContent = `
 .dc-open:focus-visible {
   outline: 3px solid #168b49;
 }
+
+@media(max-width:580px) {
+  .dc-product {
+    padding: 17px;
+    margin: 10px auto;
+  }
+}
 `;
 
 document.head.appendChild(style);
 
+// FILTROS
 function drawFilters() {
   const cats = [
     "Todos",
@@ -233,6 +260,7 @@ function drawFilters() {
   });
 }
 
+// MOSTRAR PRODUCTOS
 function draw() {
   detail.hidden = true;
   grid.hidden = false;
@@ -284,7 +312,9 @@ function draw() {
 
           <div class="bottom">
             <span class="price">
-              ${escapeHTML(p.price)}
+              ${typeof p.price === "number"
+                ? "$" + p.price.toLocaleString("es-AR")
+                : escapeHTML(p.price)}
             </span>
             <span class="ask">VER PRODUCTO →</span>
           </div>
@@ -299,6 +329,7 @@ function draw() {
   });
 }
 
+// DESPLAZAMIENTO A LA FICHA
 function scrollToDetail() {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
@@ -314,6 +345,7 @@ function scrollToDetail() {
   });
 }
 
+// ABRIR PRODUCTO
 function openProduct(index, addHistory = true) {
   const p = products[index];
   if (!p) return;
@@ -339,10 +371,10 @@ function openProduct(index, addHistory = true) {
   detail.hidden = false;
 
   showProduct(p);
-
   scrollToDetail();
 }
 
+// FICHA INDIVIDUAL
 function showProduct(p) {
   const colors = p.colors || ["A elección"];
   const value = money(p.price);
@@ -410,7 +442,6 @@ function showProduct(p) {
         target="_blank"
         rel="noopener"
         href="${wa(p.name, 1, selectedColor)}">
-
         PEDIR POR WHATSAPP
       </a>
 
@@ -465,6 +496,7 @@ function showProduct(p) {
   };
 }
 
+// ABRIR PRODUCTO DESDE EL ENLACE
 function showFromAddress() {
   const match = location.hash.match(/^#producto=(\d+)$/);
 
@@ -475,10 +507,12 @@ function showFromAddress() {
   }
 }
 
+// EVENTOS
 search.addEventListener("input", draw);
 
 window.addEventListener("popstate", showFromAddress);
 window.addEventListener("hashchange", showFromAddress);
 
+// INICIAR CATÁLOGO
 drawFilters();
 showFromAddress();
