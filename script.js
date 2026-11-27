@@ -55,7 +55,7 @@ const products = [
     category: "Decoración",
     price: 3000,
     description: "¡Ternura y magia para esta Navidad! Oso polar impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
-    image: "jenbibre-png.png",
+    image: "oso navideño.png",
     colors: ["A elección"]
   },
 ];
