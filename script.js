@@ -26,7 +26,6 @@ const products = [
     image: "",
     colors: ["Negro", "Blanco", "Gris", "Rosa"]
   },
- 
   {
     name: "Productos a pedido",
     category: "Personalizados",
@@ -40,7 +39,7 @@ const products = [
     category: "Decoración",
     price: 3000,
     description: "¡Ternura y magia para esta Navidad! Reno impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
-    image: "",
+    image: "reno-navideno.png",
     colors: ["A elección"]
   }
 ];
@@ -368,7 +367,9 @@ function showProduct(p) {
       <h2>${escapeHTML(p.name)}</h2>
 
       <div class="dc-price">
-        ${escapeHTML(p.price)}
+        ${value
+          ? "$" + value.toLocaleString("es-AR")
+          : escapeHTML(p.price)}
       </div>
 
       <p class="dc-description">
