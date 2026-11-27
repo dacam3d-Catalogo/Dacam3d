@@ -42,6 +42,14 @@ const products = [
     image: "VENADO-PNG.jpg",
     colors: ["A elección"]
   },
+  {
+    name: "Jengibre navideño tejido",
+    category: "Decoración",
+    price: 3000,
+    description: "¡Ternura y magia para esta Navidad! Jengibre impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
+    image: "",
+    colors: ["A elección"]
+  },
 ];
 
 // ELEMENTOS DEL HTML
