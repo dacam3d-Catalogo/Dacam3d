@@ -41,7 +41,7 @@ const products = [
     description: "¡Ternura y magia para esta Navidad! Reno impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
     image: "",
     colors: ["A elección"]
-  }
+  },
 ];
 
 const grid = document.getElementById("grid");
