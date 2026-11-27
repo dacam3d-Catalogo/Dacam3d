@@ -38,7 +38,7 @@ const products = [
   category: "Decoración",
   price: 3000,
   description: "¡Ternura y magia para esta Navidad! Reno impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
-  image: "",
+  image: "VENADO PNG.png",
   colors: ["A elección"]
 },
 ];
