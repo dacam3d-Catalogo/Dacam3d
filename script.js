@@ -50,6 +50,14 @@ const products = [
     image: "jenbibre-png.png",
     colors: ["A elección"]
   },
+    {
+    name: "Oso polar navideño tejido",
+    category: "Decoración",
+    price: 3000,
+    description: "¡Ternura y magia para esta Navidad! Oso polar impreso en 3D con textura estilo tejido crochet. Ideal para decorar o regalar.",
+    image: "jenbibre-png.png",
+    colors: ["A elección"]
+  },
 ];
 
 // ELEMENTOS DEL HTML
