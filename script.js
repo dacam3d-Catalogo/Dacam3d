@@ -50,7 +50,7 @@ const products = [
     image: "jenbibre-png.png",
     colors: ["A elección"]
   },
-    {
+  {
     name: "Oso polar navideño tejido",
     category: "Decoración",
     price: 3000,
@@ -242,7 +242,174 @@ style.textContent = `
   outline: 3px solid #168b49;
 }
 
+/* Carrito DaCam 3D */
+#dc-cart-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9998;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 19px;
+  background: #168b49;
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 5px 22px rgba(0,0,0,.22);
+  cursor: pointer;
+}
+
+#dc-cart-fab span {
+  display: inline-flex;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 6px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  color: #168b49;
+}
+
+#dc-cart-panel {
+  position: fixed;
+  z-index: 9999;
+  right: 20px;
+  bottom: 82px;
+  width: min(420px, calc(100vw - 28px));
+  max-height: min(70vh, 620px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #e8e5df;
+  border-radius: 16px;
+  background: #fff;
+  color: #222;
+  box-shadow: 0 10px 38px rgba(0,0,0,.22);
+}
+
+#dc-cart-panel[hidden] {
+  display: none !important;
+}
+
+.dc-cart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dc-cart-head h2 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.dc-cart-close {
+  border: 0;
+  background: transparent;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.dc-cart-empty {
+  color: #666;
+  line-height: 1.5;
+  padding: 12px 0;
+}
+
+.dc-cart-item {
+  padding: 13px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.dc-cart-item strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.dc-cart-meta {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.dc-cart-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dc-cart-actions button {
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.dc-cart-actions .dc-cart-remove {
+  margin-left: auto;
+  padding: 0 9px;
+  font-size: 13px;
+}
+
+.dc-cart-summary {
+  padding-top: 15px;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.dc-cart-note {
+  margin: 7px 0 12px;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.dc-cart-whatsapp {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #168b49;
+  color: #fff !important;
+  text-align: center;
+  text-decoration: none !important;
+  font-weight: 800;
+}
+
+.dc-add-cart {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 10px;
+  padding: 15px;
+  border: 0;
+  border-radius: 10px;
+  background: #222;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
 @media(max-width:580px) {
+  #dc-cart-fab {
+    right: 12px;
+    bottom: 12px;
+    padding: 12px 15px;
+  }
+
+  #dc-cart-panel {
+    right: 8px;
+    bottom: 72px;
+    width: calc(100vw - 16px);
+  }
+
   .dc-product {
     padding: 17px;
     margin: 10px auto;
@@ -251,6 +418,289 @@ style.textContent = `
 `;
 
 document.head.appendChild(style);
+
+// CARRITO: se guarda en el navegador para no perderlo al recargar.
+const CART_STORAGE_KEY = "dacam3d_cart_v1";
+let cart = [];
+
+try {
+  const savedCart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "[]");
+  if (Array.isArray(savedCart)) cart = savedCart;
+} catch (error) {
+  cart = [];
+}
+
+function saveCart() {
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  } catch (error) {
+    console.warn("No se pudo guardar el carrito en este navegador.", error);
+  }
+}
+
+function cartItemKey(productIndex, color) {
+  return String(productIndex) + "::" + String(color);
+}
+
+function addToCart(product, color, quantity) {
+  const productIndex = products.indexOf(product);
+  if (productIndex < 0) return;
+
+  const key = cartItemKey(productIndex, color);
+  const existing = cart.find(item => item.key === key);
+
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    cart.push({
+      key,
+      productIndex,
+      color,
+      quantity
+    });
+  }
+
+  saveCart();
+  renderCart();
+  openCart();
+}
+
+function cartCount() {
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function cartTotal() {
+  return cart.reduce((sum, item) => {
+    const product = products[item.productIndex];
+    const price = product ? money(product.price) : null;
+    return sum + (price ? price * item.quantity : 0);
+  }, 0);
+}
+
+function createCartInterface() {
+  if (document.getElementById("dc-cart-fab")) return;
+
+  const fab = document.createElement("button");
+  fab.id = "dc-cart-fab";
+  fab.type = "button";
+  fab.innerHTML = '🛒 Carrito <span id="dc-cart-count">0</span>';
+  fab.setAttribute("aria-label", "Abrir carrito de compras");
+
+  fab.onclick = () => {
+    const panel = document.getElementById("dc-cart-panel");
+    panel.hidden = !panel.hidden;
+
+    if (!panel.hidden) renderCart();
+  };
+
+  const panel = document.createElement("section");
+  panel.id = "dc-cart-panel";
+  panel.hidden = true;
+  panel.setAttribute("aria-label", "Carrito de compras");
+
+  document.body.append(fab, panel);
+
+  renderCart();
+}
+
+function openCart() {
+  const panel = document.getElementById("dc-cart-panel");
+
+  if (panel) {
+    panel.hidden = false;
+  }
+}
+
+function changeCartQuantity(key, change) {
+  const item = cart.find(entry => entry.key === key);
+
+  if (!item) return;
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    cart = cart.filter(entry => entry.key !== key);
+  }
+
+  saveCart();
+  renderCart();
+}
+
+function removeCartItem(key) {
+  cart = cart.filter(item => item.key !== key);
+
+  saveCart();
+  renderCart();
+}
+
+function cartWhatsAppUrl() {
+  const lines = cart.map(item => {
+    const product = products[item.productIndex];
+
+    if (!product) return "";
+
+    const price = money(product.price);
+
+    const subtotal = price
+      ? "\nSubtotal: $" + (price * item.quantity).toLocaleString("es-AR")
+      : "\nPrecio: A consultar";
+
+    return (
+      "\n• " + product.name +
+      "\n  Cantidad: " + item.quantity +
+      "\n  Color: " + item.color +
+      subtotal
+    );
+  }).filter(Boolean);
+
+  const total = cartTotal();
+
+  const hasConsultPrice = cart.some(item => {
+    const product = products[item.productIndex];
+
+    return !product || !money(product.price);
+  });
+
+  const message =
+    "Hola DaCam 3D! Quiero hacer este pedido:\n" +
+    lines.join("\n") +
+    "\n\nTotal de productos con precio: $" +
+    total.toLocaleString("es-AR") +
+    (hasConsultPrice ? "\nHay productos con precio a consultar." : "") +
+    "\n\n¿Me confirman el pedido?";
+
+  return "https://wa.me/" + WHATSAPP_NUMBER +
+    "?text=" + encodeURIComponent(message);
+}
+
+function renderCart() {
+  const count = document.getElementById("dc-cart-count");
+  const panel = document.getElementById("dc-cart-panel");
+
+  if (count) {
+    count.textContent = cartCount();
+  }
+
+  if (!panel) return;
+
+  if (!cart.length) {
+    panel.innerHTML = `
+      <div class="dc-cart-head">
+        <h2>Tu carrito</h2>
+        <button class="dc-cart-close" type="button" aria-label="Cerrar">×</button>
+      </div>
+
+      <p class="dc-cart-empty">
+        Todavía no agregaste productos.<br>
+        Elegí algo del catálogo para empezar.
+      </p>
+    `;
+  } else {
+    const rows = cart.map(item => {
+      const product = products[item.productIndex];
+
+      if (!product) return "";
+
+      const price = money(product.price);
+
+      const linePrice = price
+        ? "$" + (price * item.quantity).toLocaleString("es-AR")
+        : "A consultar";
+
+      return `
+        <article class="dc-cart-item">
+          <strong>${escapeHTML(product.name)}</strong>
+
+          <div class="dc-cart-meta">
+            Color: ${escapeHTML(item.color)} · ${linePrice}
+          </div>
+
+          <div class="dc-cart-actions">
+            <button
+              type="button"
+              data-cart-minus="${escapeHTML(item.key)}"
+              aria-label="Restar">−</button>
+
+            <b>${item.quantity}</b>
+
+            <button
+              type="button"
+              data-cart-plus="${escapeHTML(item.key)}"
+              aria-label="Sumar">+</button>
+
+            <button
+              type="button"
+              class="dc-cart-remove"
+              data-cart-remove="${escapeHTML(item.key)}">
+              Quitar
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    const hasConsultPrice = cart.some(item => {
+      const product = products[item.productIndex];
+
+      return !product || !money(product.price);
+    });
+
+    panel.innerHTML = `
+      <div class="dc-cart-head">
+        <h2>Tu carrito (${cartCount()})</h2>
+
+        <button
+          class="dc-cart-close"
+          type="button"
+          aria-label="Cerrar">×</button>
+      </div>
+
+      ${rows}
+
+      <div class="dc-cart-summary">
+        Total con precio: $${cartTotal().toLocaleString("es-AR")}
+      </div>
+
+      ${hasConsultPrice
+        ? '<p class="dc-cart-note">Algunos productos tienen precio a consultar. DaCam 3D te confirmará el valor por WhatsApp.</p>'
+        : ""}
+
+      <a
+        class="dc-cart-whatsapp"
+        href="${cartWhatsAppUrl()}"
+        target="_blank"
+        rel="noopener">
+        ENVIAR PEDIDO POR WHATSAPP
+      </a>
+    `;
+  }
+
+  const close = panel.querySelector(".dc-cart-close");
+
+  if (close) {
+    close.onclick = () => {
+      panel.hidden = true;
+    };
+  }
+
+  panel.querySelectorAll("[data-cart-minus]").forEach(button => {
+    button.onclick = () => {
+      changeCartQuantity(button.dataset.cartMinus, -1);
+    };
+  });
+
+  panel.querySelectorAll("[data-cart-plus]").forEach(button => {
+    button.onclick = () => {
+      changeCartQuantity(button.dataset.cartPlus, 1);
+    };
+  });
+
+  panel.querySelectorAll("[data-cart-remove]").forEach(button => {
+    button.onclick = () => {
+      removeCartItem(button.dataset.cartRemove);
+    };
+  });
+}
 
 // FILTROS
 function drawFilters() {
@@ -332,6 +782,7 @@ function draw() {
                 ? "$" + p.price.toLocaleString("es-AR")
                 : escapeHTML(p.price)}
             </span>
+
             <span class="ask">VER PRODUCTO →</span>
           </div>
         </div>
@@ -364,6 +815,7 @@ function scrollToDetail() {
 // ABRIR PRODUCTO
 function openProduct(index, addHistory = true) {
   const p = products[index];
+
   if (!p) return;
 
   selectedQuantity = 1;
@@ -452,14 +904,9 @@ function showProduct(p) {
           : "Precio a consultar"}
       </div>
 
-      <a
-        class="dc-order"
-        id="dc-order"
-        target="_blank"
-        rel="noopener"
-        href="${wa(p.name, 1, selectedColor)}">
-        PEDIR POR WHATSAPP
-      </a>
+      <button class="dc-add-cart" id="dc-add-cart" type="button">
+        AGREGAR AL CARRITO
+      </button>
 
     </div>
   `;
@@ -477,12 +924,13 @@ function showProduct(p) {
         ? "Total: $" +
           (value * selectedQuantity).toLocaleString("es-AR")
         : "Precio a consultar";
-
-    document.getElementById("dc-order").href =
-      wa(p.name, selectedQuantity, selectedColor);
   }
 
   colorSelect.onchange = updateOrder;
+
+  document.getElementById("dc-add-cart").onclick = () => {
+    addToCart(p, selectedColor, selectedQuantity);
+  };
 
   document.getElementById("dc-minus").onclick = () => {
     if (selectedQuantity > 1) {
@@ -530,5 +978,6 @@ window.addEventListener("popstate", showFromAddress);
 window.addEventListener("hashchange", showFromAddress);
 
 // INICIAR CATÁLOGO
+createCartInterface();
 drawFilters();
 showFromAddress();
